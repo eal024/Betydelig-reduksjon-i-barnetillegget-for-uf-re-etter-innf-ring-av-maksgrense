@@ -26,9 +26,10 @@ graf_13 <-
             teoretisk_kom_grad = kg,
             gj_effekt = reduksjon ) |>
     mutate( for_2016 =  ifelse(for_2016 == 1, paste0("Del av overgangsordning"), paste0("Nye mottaker etter 2016")  ) %>% as.factor(),
-            gj_effekt = gj_effekt*106399
+            gj_effekt = gj_effekt*106399,
+            `Kompensasjonsgrad for avkorting `= teoretisk_kom_grad
             ) %>% 
-    ggplot( aes(x = teoretisk_kom_grad, y = gj_effekt, fill = as.factor(for_2016), color= as.factor(for_2016)) ) +
+    ggplot( aes(x = `Kompensasjonsgrad for avkorting `, y = gj_effekt, fill = as.factor(for_2016), color= as.factor(for_2016)) ) +
     geom_line( size = 1) +
     facet_wrap(~ ar) +
     theme_ipsum(  ) +
@@ -43,7 +44,9 @@ graf_13 <-
     scale_colour_manual(values = c( "#EBB261", "#9D5A6C")) +
     scale_x_continuous( breaks = c(.4, .7, .95 , 1.15),
                         labels = function(x) ifelse( x == 0.95, format(x, digits =2) %>% dropLeadingZero, format(x, digits =1) %>% dropLeadingZero ) ) +
-    labs( y = "Reduksjon fra 2016-reglen (2021G)", x = "Kompensasjonsgrad før avkorting") +
+    labs( 
+        y = NULL #, x = "Kompensasjonsgrad før avkorting"
+          ) +
     scale_y_continuous( labels = function(x) paste(format(x, big.mark = " "), " kr"), limits = c(0,50000)) +
     geom_vline( xintercept = 0.93, linetype =2, color= "red")
 
