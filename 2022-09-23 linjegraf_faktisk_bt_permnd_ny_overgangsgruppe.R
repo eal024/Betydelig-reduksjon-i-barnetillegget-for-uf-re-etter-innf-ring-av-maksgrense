@@ -56,8 +56,8 @@ df %>%
 df1 <- df %>%
     mutate( keep = ifelse( (  str_detect(kategori, "nye etter") & dato < ymd("2016-02-01")) , F, T ),
             kategori = fct_rev(kategori)
-    
-            ) %>%
+            
+    ) %>%
     filter( keep == T, 
             kategori %in% c("nye etter 2016, alle","overgangordning, alle") 
     ) %>% 
@@ -68,20 +68,21 @@ text <- tibble( gr = df1$gr %>% unique() %>% rep(2),
                 barnetillegg = c( c(0.23,0.32,0.4,.48 ),c(0.2,0.3,0.4,0.7) ),
                 dato = c("2017-01-01","2018-01-01","2018-01-01","2018-01-01", "2017-01-01","2018-01-01","2018-01-01","2018-01-01") %>% ymd(),
                 kategori = rep( c("Nye mottakere etter 2016","Mottakere i overgangsordning"), each = 4) ) 
-                    
 
-    
+
+Sys.setlocale("LC_CTYPE")
+
 graf <- df1 %>%  
     ggplot( aes( y = barnetillegg, x = dato , fill = factor(gr), color = factor(gr) ) ) +
     geom_point( data = df1 %>% filter( month(dato) == 1),  aes( y = barnetillegg, x = dato , fill = factor(gr)), color ="black", size =2, alpha =.5 ) +
     geom_line( size = 0.8, alpha = .7) +
     theme_ipsum() +
     theme( 
-           legend.position = "none",
-           panel.grid.major.x = element_blank(),
-           panel.grid.minor.x = element_blank(),
-           strip.text = element_text( color = "black", size = 14),
-           text = element_text( family = "Times")) +
+        legend.position = "none",
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        strip.text = element_text( color = "black", size = 14),
+        text = element_text( family = "Times")) +
     labs( y = "Faktisk utbetalt barnetillegg", x = "År") +
     scale_color_manual( values = c(navR::nav_farger()[1],navR::nav_farger()[2],navR::nav_farger()[4],navR::nav_farger()[5] )  ) +
     geom_text( data =text, aes(y = barnetillegg, x = dato, label = gr), vjust = .1, hjust =.1 ) +
@@ -89,8 +90,8 @@ graf <- df1 %>%
 
 
 
-graf %>% ggsave( filename = "plot/graf_bt_faktisk_pr_mnd_overg_og_nye.png", device = "png", width = 10, height =6 )
-graf %>% ggsave( filename = "plot/SVG/graf_bt_faktisk_pr_mnd_overg_og_nye.svg", device = "svg", width = 10, height =6 )
+graf %>% ggsave( filename = "plot/graf_bt_faktisk_pr_mnd_overg_og_nye.png", device = "png", width = 10, height =5 )
+graf %>% ggsave( filename = "plot/SVG/graf_bt_faktisk_pr_mnd_overg_og_nye.svg", device = "svg", width = 10, height =5 )
 
 
 # Per år ------------------------------------------------------------------
@@ -99,7 +100,7 @@ df1 %>%
     group_by( ar = year(dato), gr) %>% 
     summarise( bt = mean(barnetillegg) ) %>% 
     pivot_wider( names_from = gr, values_from = bt)
-    
+
 
 
 

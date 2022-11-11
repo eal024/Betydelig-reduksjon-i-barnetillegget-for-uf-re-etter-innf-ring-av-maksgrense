@@ -58,7 +58,7 @@ graf_hist1_2 <- graf_hist1 +
 
 graf_hist1_2
 
-graf_hist1_2 %>% ggsave( filename = "plot/graf_hist1.png", device = "png", width = 7.5, height = 5 )
+# graf_hist1_2 %>% ggsave( filename = "plot/graf_hist1.png", device = "png", width = 7.5, height = 5 )
 
 # Histogram 2 -------------------------------------------------------------
 
@@ -74,7 +74,7 @@ graf_hist2 <- data2 %>%
     mutate( 
         ant_barn = ifelse( ant_barn > 4, "4<", ant_barn ) %>% factor(),
         ant_barn = factor( ant_barn , levels = c("1", "2", "3", "4", "4<"))
-        ) %>%
+    ) %>%
     group_by(ant_barn) %>% 
     ggplot(aes(y = effekt, x = ant_barn , fill = ant_barn )) +
     geom_boxplot(aes(colour = ant_barn  ), width = 0.2) +
@@ -106,10 +106,10 @@ g <- (graf_hist1_2+ geom_hline( yintercept = c(50000,25000), linetype = c(2))) +
     (graf_hist2 + geom_hline( yintercept = c(50000,25000), linetype = c(2)))
 
 
-g %>% ggsave( filename = "plot/graf_histogram_effekt.png", device = "png", width = 10, height = 5 )
+g  |>  ggsave( filename = "plot/graf_histogram_utregning.png", device = "png", width = 10, height = 5 )
+g  |>  ggsave( filename = "plot/SVG/graf_histogram_utregning.svg", device = "svg", width = 10, height = 5 )
 
 
-        
 # data <- tibble( ar = 2015:2018) %>% 
 #     expand_grid( effekt = rnorm(n = 100, mean = 0.5, sd = 0.1 ) )
 # 
@@ -132,4 +132,3 @@ g %>% ggsave( filename = "plot/graf_histogram_effekt.png", device = "png", width
 #     guides(fill = FALSE, color = FALSE) +
 #     coord_flip() 
 # 
-
